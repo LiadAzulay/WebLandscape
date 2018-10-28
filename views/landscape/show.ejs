@@ -1,0 +1,57 @@
+<% include ../partials/header %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Landscapes</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info 1</li>
+                <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img class="image-responsive" src="<%=landscape.image%>">
+                <div class="caption-full">
+                    <h4><a><%=landscape.name%></a></h4>
+                    <p><%=landscape.description%></p>
+                    <p>
+                        <em>Submitted By <%=landscape.author.username%></em>
+                    </p>
+                    <% if(currentUser && landscape.author.id.equals(currentUser._id)) {%>
+                    <a class="btn btn-warning" id="edit" href="/landscapes/<%= landscape._id %>/edit">Edit</a>
+                     <form id="delete-form" action="/landscapes/<%= landscape._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    <% } %>
+                </div>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/landscapes/<%=landscape._id%>/comments/new">Add new comment</a>
+                </div>
+                <hr>
+                <%landscape.comments.forEach(function(comment){%>
+                <div class="row">
+                    <div class="col-md-12">
+                      <strong>  <%=comment.author.username%></strong>
+                        <span class="pull-right">10 days ago</span>
+                        <p>
+                            <%=comment.text%>
+                        </p>
+                        <% if(currentUser && comment.author.id.equals(currentUser._id)) {%>
+                            <a class="btn btn-xs btn-warning" href="/landscapes/<%= landscape._id%>/comments/<%=comment._id%>/edit">Edit</a>
+                            <form id="delete-form-comment" action="/landscapes/<%= landscape._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                                <input type="submit" class="btn btn-xs btn-danger" value="delete">
+                            </form>
+                        <% } %>      
+                    </div>
+                </div>
+                <% }) %>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<%include ../partials/footer %>
